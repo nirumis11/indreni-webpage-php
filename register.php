@@ -1,43 +1,46 @@
-<?php include('server.php') ?>
+<?php 
+  session_start(); 
+
+  if (!isset($_SESSION['Phone'])) {
+  	$_SESSION['msg'] = "You must log in first";
+  	header('location: login.php');
+  }
+  if (isset($_GET['logout'])) {
+  	session_destroy();
+  	unset($_SESSION['Phone']);
+  	header("location: login.php");
+  }
+?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Registration system PHP and MySQL</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+	<title>Home</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-  <div class="header">
-  	<h2>Register</h2>
-  </div>
-	
-  <form method="post" action="register.php">
-  	<?php include('error.php'); ?>
-  	<div class="input-group">
-  	  <label>Firstname</label>
-  	  <input type="text" name="First_Name" value="<?php echo $firstname; ?>">
-  	</div>
-	  <div class="input-group">
-  	  <label>Lastname</label>
-  	  <input type="text" name="Last_Name" value="<?php echo $lastname; ?>">
-  	</div>
-  	<div class="input-group">
-  	  <label>Phone</label>
-  	  <input type="text" name="Phone" value="<?php echo $phone; ?>">
-  	</div>
-  	<div class="input-group">
-  	  <label>Password</label>
-  	  <input type="password" name="Password_1">
-  	</div>
-  	<div class="input-group">
-  	  <label>Confirm password</label>
-  	  <input type="password" name="Password_2">
-  	</div>
-  	<div class="input-group">
-  	  <button type="submit" class="btn" name="reg_user">Register</button>
-  	</div>
-  	<p>
-  		Already a member? <a href="login.php">Sign in</a>
-  	</p>
-  </form>
+
+<div class="header">
+	<h2>Home Page</h2>
+</div>
+<div class="content">
+  	<!-- notification message -->
+  	<?php if (isset($_SESSION['success'])) : ?>
+      <div class="error success" >
+      	<h3>
+          <?php 
+          	echo $_SESSION['success']; 
+          	unset($_SESSION['success']);
+          ?>
+      	</h3>
+      </div>
+  	<?php endif ?>
+
+    <!-- logged in user information -->
+    <?php  if (isset($_SESSION['Phone'])) : ?>
+    	<p>Welcome <strong><?php echo $_SESSION['Phone']; ?></strong></p>
+    	<p> <a href="index.php?logout='1'" style="color: red;">logout</a> </p>
+    <?php endif ?>
+</div>
+		
 </body>
 </html>
